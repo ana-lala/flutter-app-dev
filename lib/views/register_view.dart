@@ -82,13 +82,7 @@ Widget build(BuildContext context) {
                         context, 
                         'Invalid email',
                         );
-                    }else if(e.code == 'invalid-credential'){
-                       await showErrorDialog(
-                        context, 
-                        'Invalid credentials',
-                        );
-                    }
-                    else{
+                    }else{
                       await showErrorDialog(
                         context, 
                         'Error: ${e.code}',
