@@ -1,9 +1,8 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firstproject/firebase_options.dart';
+import 'package:firstproject/constants/routes.dart';
+import 'package:firstproject/utilities/show_error_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -60,33 +59,55 @@ Widget build(BuildContext context) {
                   final email = _email.text;
                   final password = _password.text;
                   try{
-                    final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
                     email: email,
                     password: password,
                   );
-                  print(userCredential);
+                  final user = FirebaseAuth.instance.currentUser;
+                  await user?.sendEmailVerification();
+                  Navigator.of(context).pushNamed(verifyEmailRoute);
                   } on FirebaseAuthException catch (e){
                     if(e.code == 'weak-password'){
-                      print('weak password');
+                      await showErrorDialog(
+                        context, 
+                        'Weak password',
+                        );
                     }else if(e.code == 'email-already-in-use'){
-                       print('email already in use');
+                       await showErrorDialog(
+                        context, 
+                        'Email already in use',
+                        );
                     }else if(e.code == 'invalid-email'){
-                       print('invalid email');
+                       await showErrorDialog(
+                        context, 
+                        'Invalid email',
+                        );
                     }else if(e.code == 'invalid-credential'){
-                       print('invalid credential');
+                       await showErrorDialog(
+                        context, 
+                        'Invalid credentials',
+                        );
                     }
                     else{
-                      print(e.code);
+                      await showErrorDialog(
+                        context, 
+                        'Error: ${e.code}',
+                        );
                     }
                   }
-                  
+                  catch(e){
+                        await showErrorDialog(
+                        context, 
+                        e.toString(),
+                        );
+                  }
                 },
                 child: const Text('Register'),
               ),
               TextButton(
                 onPressed: (){
                   Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/login/',
+                  loginRoute,
                   (route) => false
                   );
                 }, 
