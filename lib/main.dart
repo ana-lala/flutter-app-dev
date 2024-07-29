@@ -1,5 +1,4 @@
 import 'package:firstproject/constants/routes.dart';
-import 'package:firstproject/firebase_options.dart';
 import 'package:firstproject/services/auth/auth_service.dart';
 import 'package:firstproject/views/login_view.dart';
 import 'package:firstproject/views/notes_view.dart';
